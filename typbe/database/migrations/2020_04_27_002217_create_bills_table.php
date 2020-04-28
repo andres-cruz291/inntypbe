@@ -17,9 +17,7 @@ class CreateBillsTable extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id')->nullable();
             $table->string('currency');
-            $table->float('value_ord');
             $table->float('value_del');
-            $table->float('value_bil');
             $table->string('status');
             $table->string('location');
             $table->string('mobile');

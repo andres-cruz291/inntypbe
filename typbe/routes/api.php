@@ -17,3 +17,12 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::get('/bill', 'BillController@index');
+Route::post('/bill', 'BillController@store');
+Route::get('/bill/{bill}', 'BillController@show');
+Route::put('/bill/{bill}', 'BillController@update');
+
+Route::get('/pizza', 'PizzaController@index');
+Route::get('/pizza/{pizza}', 'PizzaController@show');
+Route::put('/pizza/{pizza}', 'PizzaController@update');

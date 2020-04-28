@@ -19,7 +19,6 @@ class CreatePizzaBillsTable extends Migration
             $table->unsignedBigInteger('bill_id');
             $table->integer(('quantity'));
             $table->float('uni_value');
-            $table->float('tot_value');
             $table->timestamps();
             $table->index('pizza_id');
             $table->index('bill_id');

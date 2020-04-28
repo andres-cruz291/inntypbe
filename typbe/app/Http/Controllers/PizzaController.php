@@ -10,18 +10,8 @@ use Intervention\Image\Facades\Image;
 class PizzaController extends Controller
 {
     public function index(){
-        return response()->json(Pizza::where('status', 'A')->orderBy('name'), 201);
-    }
-
-    private function prepareRecord(Request $request){
-        $pizza = new Pizza();
-        $pizza->name = $request['name'];
-        $pizza->short_desc = $request['short_desc'];
-        $pizza->description = $request['description'];
-        $pizza->value_curr_dol = $request['value_curr_dol'];
-        $pizza->value_curr_eur = $request['value_curr_eur'];
-        $pizza->status = 'A';
-        return $pizza;
+        $pizzas = Pizza::where('status', 'A')->orderBy('name')->get()->load('fotos');
+        return response()->json($pizzas, 201);
     }
 
     private function loadFotos(Request $request, $pizza_id){
@@ -41,7 +31,16 @@ class PizzaController extends Controller
 
     public function store(Request $request){
         if($request['name'] && $request['description'] && $request['value_curr_dol'] && $request['value_curr_eur']){
-            $pizza = $this->prepareRecord($request);
+            $pizza = Pizza::find($request['id']);
+            $pizza->name = $request['name'];
+            $pizza->short_desc = $request['short_desc'];
+            $pizza->description = $request['description'];
+            $pizza->value_curr_dol = $request['value_curr_dol'];
+            $pizza->value_curr_eur = $request['value_curr_eur'];
+            $pizza->status = $request['value_curr_eur'];
+            if(empty($pizza->status)){
+                $pizza->status = 'A';
+            }
             $pizza->save();
             $this->loadFotos($request, $pizza->id);
             return response()->json($pizza, 201);
@@ -56,10 +55,8 @@ class PizzaController extends Controller
 
     public function update(Request $request, $id){
         if($request['name'] && $request['description'] && $request['value_curr_dol'] && $request['value_curr_eur']) {
-            $pizza = $this->prepareRecord($request);
-            $pizza->id = $id;
-            $pizza->status = $request['status'];
-            $pizza->update();
+            $pizza = Pizza::findOrFail($id);
+            $pizza->update($request);
             $this->loadFotos($request, $id);
             return response()->json($pizza, 201);
         }else{
