@@ -30,9 +30,9 @@ class UserController extends Controller
         if($user){
             $user = User::findOrFail($user);
         }
-        if(!user){
+        if(!$user){
             $user = new User();
         }
-        return response()->json($user, 201);
+        return response()->json($user, 200);
     }
 }

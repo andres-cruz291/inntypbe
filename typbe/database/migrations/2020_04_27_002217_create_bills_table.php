@@ -19,9 +19,9 @@ class CreateBillsTable extends Migration
             $table->string('currency');
             $table->float('value_del');
             $table->string('status');
-            $table->string('location');
-            $table->string('mobile');
-            $table->string('additional_dat');
+            $table->string('location')->nullable();
+            $table->string('mobile')->nullable();
+            $table->string('additional_dat')->nullable();
             $table->timestamps();
             $table->index('user_id');
         });
