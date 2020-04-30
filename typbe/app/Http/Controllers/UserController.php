@@ -16,6 +16,9 @@ class UserController extends Controller
                 $user->email = $request['email'];
                 $user->password = $request['password'];
                 $user->type = $request['type'];
+                if(empty($user->type)){
+                    $user->type = 'C';
+                }
                 $user->save();
                 return response()->json($user, 201);
             }else{
@@ -34,5 +37,23 @@ class UserController extends Controller
             $user = new User();
         }
         return response()->json($user, 200);
+    }
+
+    public function validateLogin(Request $request){
+        $user = User::where('email', $request['email'])->first();
+        $userDat = new User();
+        if(!empty($user)){
+            if($user->password == $request['password']){
+                $userDat = $user;
+                $userDat->confirmed = true;
+            }else{
+                $userDat->confirmed = false;
+                $userDat->error = 'The password is incorrect';
+            }
+        }else{
+            $userDat->confirmed = false;
+            $userDat->error = 'The user does not exist';
+        }
+        return response()->json($userDat, 201);
     }
 }

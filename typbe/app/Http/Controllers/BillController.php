@@ -41,8 +41,14 @@ class BillController extends Controller
     public function store(Request $request){
         if($request['pizza_id'] && $request['quantity']){
             $bill = new Bill();
+            $billBase = Bill::where('user_id', $request["user_id"])->latest()->first();
             if(!empty($request['user_id'])) {
                 $bill->user_id = $request["user_id"];
+            }
+            if(!empty($billBase)){
+                $bill->location = $billBase->location;
+                $bill->mobile = $billBase->mobile;
+                $bill->additional_dat = $billBase->additional_dat;
             }
             $bill->currency = $request["currency"];
             $bill->value_del = 0;

@@ -15,22 +15,16 @@ class PizzaController extends Controller
     }
 
     private function loadFotos(Request $request, $pizza_id){
-        $x = "";
-        foreach ($request['files'] as $item => $value){
-            $x = $x.'|**|'.$item;
-            if(strpos($item, 'path') !== false){
-                throw new \Exception('Llega');
-                $imagePath = $request[$item]->store('uploads', 'public');
-                $image = Image::make(public_path("storage/{$imagePath}"))->fit(1000, 1000);
-                $image->save();
+        foreach ($request->files as $file){
+            $imagePath = $file->store('uploads', 'public');
+            $image = Image::make(public_path("storage/{$imagePath}"))->fit(700, 450);
+            $image->save();
 
-                $foto = new Foto();
-                $foto->pizza_id = $pizza_id;
-                $foto->path = $imagePath;
-                $foto->save();
-            }
+            $foto = new Foto();
+            $foto->pizza_id = $pizza_id;
+            $foto->path = "storage/{$imagePath}";
+            $foto->save();
         }
-        throw new \Exception('Request: '.$x);
     }
 
     public function store(Request $request){
@@ -54,7 +48,7 @@ class PizzaController extends Controller
     }
 
     public function show(Pizza $pizza){
-        return response()->json($pizza, 200);
+        return response()->json($pizza->load('fotos'), 200);
     }
 
     public function update($id, Request $request){
@@ -68,11 +62,11 @@ class PizzaController extends Controller
                 $pizza->short_desc = $request['short_desc'];
             }
             if(!empty($request['status'])){
-                $pizza->short_desc = $request['status'];
+                $pizza->status = $request['status'];
             }
             $pizza->save();
             $this->loadFotos($request, $id);
-            return response()->json($pizza, 201);
+            return response()->json($pizza->load('fotos'), 201);
         }else{
             return response()->json([ "error" => "Error updating the pizza: not all values sended" ], 501);
         }
