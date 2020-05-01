@@ -123,6 +123,19 @@ class PizzaTest extends TestCase
             $path = str_replace('storage/', '', $response->json()['fotos'][2]['path']);
             Storage::disk('public')->assertExists($path);
 
+            $line = "Getting photo created";
+            $data = $response->json();
+            $response = $this->json('GET',"/api/foto/{$data['id']}");
+            $response->assertStatus(200);
+            $response->assertJsonStructure([
+                'current_page', 'first_page_url', 'from',
+                'last_page', 'last_page_url', 'next_page_url',
+                'path', 'per_page', 'prev_page_url',
+                'to', 'total','data'=>['*'=>[
+                    'id', 'pizza_id', 'path'
+                ]]]);
+            $response->assertJsonCount(1, 'data');
+
             $line = "Modifying Pizza";
             $pizza = factory(Pizza::class)->make();
             $response = $this->json('PUT',"/api/pizza/{$data['id']}",[

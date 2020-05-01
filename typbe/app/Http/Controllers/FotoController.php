@@ -9,6 +9,11 @@ use Illuminate\Support\Facades\Storage;
 
 class FotoController extends Controller
 {
+    public function show($id){
+        $fotos = Foto::where('pizza_id', $id)->latest()->paginate(1);
+        return response()->json($fotos, 200);
+    }
+
     public function delete($id, Request $request){
         $foto = Foto::findOrFail($id);
         $pizza = Pizza::findOrFail($foto->pizza_id);

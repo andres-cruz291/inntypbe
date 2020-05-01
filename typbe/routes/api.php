@@ -28,8 +28,10 @@ Route::post('/pizza', 'PizzaController@store');
 Route::get('/pizza/{pizza}', 'PizzaController@show');
 Route::put('/pizza/{pizza}', 'PizzaController@update');
 
+Route::get('/foto/{pizza}', 'FotoController@show');
 Route::delete('/foto/{pizza}', 'FotoController@delete');
 
 Route::post('/user', 'UserController@store');
 Route::get('/user/{user}', 'UserController@show');
 Route::post('/user/validate', 'UserController@validateLogin');
+
