@@ -16,11 +16,10 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // $this->call(UserSeeder::class);
-        $bills = factory(Bill::class, 8)->create();
-        $pizzas = factory(Pizza::class, 8)->create();
-        $fotos = factory(Foto::class, 32)->create();
-        $pizzasBill = factory(PizzaBill::class, 24)->create();
-        $users = factory(User::class, 8)->create();
+        $this->call(UserSeeder::class);
+        $this->call(PizzaSeeder::class);
+        $this->call(FotoSeeder::class);
+        $this->call(BillsSeeder::class);
+        $this->call(PizzaBillSeeder::class);
     }
 }
